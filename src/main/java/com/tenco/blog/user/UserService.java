@@ -1,6 +1,7 @@
 package com.tenco.blog.user;
 
 import com.tenco.blog._core.errors.exception.Exception400;
+import com.tenco.blog._core.errors.exception.Exception403;
 import com.tenco.blog._core.errors.exception.Exception404;
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +32,7 @@ public class UserService {
         // 2. 회원 가입 처리
         User savedUser = userJpaRepository.save(joinDTO.toEntity());
         // 3. 응답 DTO로 변환 해서 반환 일을 시킴
-        return  new UserResponse.JoinDTO(savedUser);
+        return new UserResponse.JoinDTO(savedUser);
     }
 
     /**
@@ -49,7 +50,7 @@ public class UserService {
     }
 
     /**
-     *  사용자 정보 조회 - 응답 DTO 반환 책임
+     * 사용자 정보 조회 - 응답 DTO 반환 책임
      */
     public UserResponse.DetailDTO findById(Long id) {
         // 인증 처리 --> 세션 기반 (JWT 추후 변경)
@@ -59,15 +60,15 @@ public class UserService {
             return new Exception404("사용자를 찾을 수 없습니다");
         });
         // 응답 DTO 변환 처리
-         return new UserResponse.DetailDTO(selectedUser);
+        return new UserResponse.DetailDTO(selectedUser);
     }
 
     /**
-     *  회원정보 수정 처리 - DTO 변환 책임
+     * 회원정보 수정 처리 - DTO 변환 책임
      */
     @Transactional
     public UserResponse.UpdateDTO updateById(Long userId, UserRequest.UpdateDTO updateDTO) {
-        log.info("회원정보 수정 서비스 처리 시작 - ID : {}",  userId);
+        log.info("회원정보 수정 서비스 처리 시작 - ID : {}", userId);
 
         // 1. 권한 체크
         User selectedUser = userJpaRepository.findById(userId)
@@ -79,5 +80,21 @@ public class UserService {
 
         // 3. 응답 DTO 반환
         return new UserResponse.UpdateDTO(selectedUser);
+    }
+
+    public UserResponse.DetailDTO findUserById(Long id, User sessionUser) {
+
+        // 권한 확인
+        if (!sessionUser.getId().equals(id)) {
+            throw new Exception403("본인 정보만 조회 가능합니다");
+        }
+        // 정보 조회
+        User selectedUser = userJpaRepository.findById(id).orElseThrow(() -> {
+            throw new Exception404("사용자를 찾을 수 없습니다");
+        });
+
+        // 응답 DTO 변환 처리
+        return new UserResponse.DetailDTO(selectedUser);
+
     }
 }
