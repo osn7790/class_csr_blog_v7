@@ -2,12 +2,8 @@ package com.tenco.blog.board;
 
 import com.tenco.blog._core.errors.exception.Exception403;
 import com.tenco.blog._core.errors.exception.Exception404;
-import com.tenco.blog.reply.Reply;
 import com.tenco.blog.user.User;
-import com.tenco.blog.utils.Define;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

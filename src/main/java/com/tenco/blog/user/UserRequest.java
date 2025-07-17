@@ -1,5 +1,8 @@
 package com.tenco.blog.user;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +15,17 @@ public class UserRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class JoinDTO {
+        @NotEmpty(message = "사용자명을 입력해주세요")
+        @Pattern(regexp = "^[a-zA-Z0-9]{2,20}$", message = "영문/숫자/ 2~20자 이내로 작성해주세요")
         private String username;
+        @NotEmpty(message = "비밀번호를 입력해주세요") // null, 빈 문자열("") 허용 x
+        @Size(min = 4, max = 20, message = "비밀번호 4~20자 이내로 작성해주세요")
         private String password;
+        @NotEmpty(message = "이메일은 필수입니다")  // 필수 입력 검증
+        @Pattern(
+                regexp = "^[a-zA-Z0-9]{2,10}@[a-zA-Z0-9]{2,6}\\.[a-zA-Z]{2,3}$",
+                message = "이메일 형식으로 작성해주세요"
+        )
         private String email;
 
         // JoinDTO 를 User Object 변환 하는 메서드 추가
@@ -25,66 +37,39 @@ public class UserRequest {
                     .email(this.email)
                     .build();
         }
-        // 회원가입시 유효성 검증 메서드
-        public void validate() {
 
-            if(username == null || username.trim().isEmpty()) {
-                throw new IllegalArgumentException("사용자 명은 필수야");
-            }
-            if(password == null || password.trim().isEmpty()) {
-                throw new IllegalArgumentException("비밀번호는 필수야");
-            }
-            // 간단한 이메일 형식 검증 (정규화 표현식)
-            if(email.contains("@") == false) {
-                throw new IllegalArgumentException("올바른 이메일 형식이 아닙니다");
-            }
-        }
     }
-    
-    // 로그인 용 DTO
+
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class LoginDTO {
-        private String username; 
-        private String password; 
-        
-        // 유효성 검사 
-        public void validate() {
-            if(username == null || username.trim().isEmpty()) {
-                throw new IllegalArgumentException("야 사용자명 입력해");
-            }
-            if(password == null || password.trim().isEmpty()) {
-                throw new IllegalArgumentException("야 비밀번호 입력해");
-            }
-        }
-        
+        @NotEmpty(message = "사용자명을 입력해주세요")
+        @Pattern(regexp = "^[a-zA-Z0-9]{2,20}$", message = "영문/숫자/ 2~20자 이내로 작성해주세요")
+        private String username;
+
+        @NotEmpty(message = "비밀번호를 입력해주세요") // null, 빈 문자열("") 허용 x
+        @Size(min = 4, max = 20, message = "비밀번호 4~20자 이내로 작성해주세요")
+        private String password;
+
+
+
     }
 
-    // 회원 정보 수정용 DTO
     @Data
     public static class UpdateDTO {
+
+        @NotEmpty(message = "비밀번호를 입력해주세요") // null, 빈 문자열("") 허용 x
+        @Size(min = 4, max = 20, message = "비밀번호 4~20자 이내로 작성해주세요")
         private String password;
+        @NotEmpty(message = "이메일은 필수입니다")  // 필수 입력 검증
+        @Pattern(
+                regexp = "^[a-zA-Z0-9]{2,10}@[a-zA-Z0-9]{2,6}\\.[a-zA-Z]{2,3}$",
+                message = "이메일 형식으로 작성해주세요"
+        )
         private String email;
-        // username <-- 유니크로 설정 함
-
-        // toEntity (더티체킹 사용)
-
-        public void validate() {
-            if(password == null || password.trim().isEmpty()) {
-                throw new IllegalArgumentException("비밀번호는 필수야");
-            }
-            if(password.length() < 4) {
-                throw new IllegalArgumentException("비밀번호는 4자 이상이어야 합니다");
-            }
-            // 간단한 이메일 형식 검증 (정규화 표현식)
-            if(email.contains("@") == false) {
-                throw new IllegalArgumentException("올바른 이메일 형식이 아닙니다");
-            }
-        }
 
     }
-    
 
 }

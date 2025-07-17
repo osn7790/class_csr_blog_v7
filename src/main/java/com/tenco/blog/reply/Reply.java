@@ -2,7 +2,7 @@ package com.tenco.blog.reply;
 
 import com.tenco.blog.board.Board;
 import com.tenco.blog.user.User;
-import com.tenco.blog.utils.MyDateUtil;
+import com.tenco.blog._core.utils.MyDateUtil;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;

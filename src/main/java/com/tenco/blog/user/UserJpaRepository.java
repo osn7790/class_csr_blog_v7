@@ -14,8 +14,6 @@ public interface UserJpaRepository extends JpaRepository<User, Long> {
                                              @Param("password") String password);
 
     // 사용자 이름으로 사용자 조회(중복 체크용)
-    // @Query(value = "select * from user_tb where username = :username", nativeQuery = true)
-    // JPQL 명식적으로 입력해서 사용함
     @Query("SELECT u FROM User u WHERE u.username = :username")
     Optional<User> findByUsername(@Param("username") String username);
 

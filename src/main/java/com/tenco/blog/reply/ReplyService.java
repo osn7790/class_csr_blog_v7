@@ -23,7 +23,7 @@ public class ReplyService {
     // 댓글 저장 기능
     // 서비스계층, Repository 계층에 메서드 이름 (같이 , 다른게 정의)
     @Transactional
-    public void save(ReplyRequest.SaveDTO saveDTO, User sessionUser) {
+    public ReplyResponse.SaveDTO save(ReplyRequest.SaveDTO saveDTO, User sessionUser) {
         log.info("댓글 저장 서비스 처리 시작 - 게시글 ID {}, 작성자 {}, ",
                 saveDTO.getBoardId(), sessionUser.getUsername());
 
@@ -34,6 +34,7 @@ public class ReplyService {
         Reply reply = saveDTO.toEntity(sessionUser, board);
         // 4. 저장 - 정방향 insert 처리
         replyJpaRepository.save(reply);
+        return new ReplyResponse.SaveDTO(reply);
     }
 
     @Transactional
