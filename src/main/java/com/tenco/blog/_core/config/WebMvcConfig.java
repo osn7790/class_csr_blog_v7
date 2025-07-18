@@ -21,7 +21,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/**")
                 // 공개 API는 제외 처리
                 .excludePathPatterns(
-                        "/api/boards", // 게시글 목록은 누가 응답 받을 수 있음
                         "/api/boards/{id:\\d+}/detail" // 게시글 상세보기 누구나 응답 허용
                 );
 
