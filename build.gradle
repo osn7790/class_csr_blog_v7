@@ -24,7 +24,8 @@ repositories {
 }
 
 dependencies {
-
+	// Swagger (SpringDoc OpenAPI 3) 추가
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 	//JWT 토큰
 	implementation group: 'com.auth0', name: 'java-jwt', version: '4.4.0'
 	// 유효성 검사 추가
